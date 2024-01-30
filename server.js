@@ -2,6 +2,8 @@
 
 const express = require("express");
 
+const { db } = require("./db/index");
+
 const app = express();
 
 // general server error handler
