@@ -6,6 +6,8 @@ const { db } = require("./db/index");
 
 const app = express();
 
+app.use(express.json());
+
 // general server error handler
 app.use((err, req, res, next) => {
     console.error(err);
