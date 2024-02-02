@@ -4,7 +4,19 @@ const { db } = require("../../db/index");
 
 /** @type {import("express").RequestHandler} */
 function getAuthors(req, res, next) {
+    const sql = `
+        SELECT *
+        FROM author;
+    `;
+    db.all(sql, function (err, rows) {
+        if (err) {
+            next(err);
 
+            res.status(500).json({ error: "Something went wrong." });
+        }
+
+        res.status(200).json(rows);
+    });
 }
 
 /** @type {import("express").RequestHandler} */
