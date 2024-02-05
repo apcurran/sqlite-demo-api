@@ -18,7 +18,18 @@ function getBooks(req, res, next) {
 
 /** @type {import("express").RequestHandler} */
 function getBook(req, res, next) {
+    const { bookId } = req.params;
+    db.get(`
+        SELECT *
+        FROM book
+        WHERE book_id = ?;
+    `, bookId, function (err, row) {
+        if (err) {
+            next(err);
+        }
 
+        res.status(200).json(row);
+    });
 }
 
 /** @type {import("express").RequestHandler} */
