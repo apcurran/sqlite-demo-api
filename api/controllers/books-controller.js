@@ -74,7 +74,18 @@ function postBook(req, res, next) {
 
 /** @type {import("express").RequestHandler} */
 function deleteBook(req, res, next) {
+    const { bookId } = req.params;
+    db.run(`
+        DELETE
+        FROM book
+        WHERE book_id = ?;
+    `, bookId, function (err) {
+        if (err) {
+            next(err);
+        }
 
+        res.status(200).json({ msg: "Book deleted." });
+    });
 }
 
 module.exports = {
