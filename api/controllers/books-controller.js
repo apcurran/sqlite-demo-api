@@ -4,7 +4,16 @@ const { db } = require("../../db/index");
 
 /** @type {import("express").RequestHandler} */
 function getBooks(req, res, next) {
+    db.all(`
+        SELECT *
+        FROM book;
+    `, function (err, rows) {
+        if (err) {
+            next(err);
+        }
 
+        res.status(200).json(rows);
+    });
 }
 
 /** @type {import("express").RequestHandler} */
@@ -23,13 +32,13 @@ function postBook(req, res, next) {
         authorLastName,
     } = req.body;
 
-    db.serialize(function() {
+    db.serialize(function () {
         // query for authorId
         db.get(`
             SELECT author_id
             FROM author
             WHERE first_name = ? AND last_name = ?;
-        `, [authorFirstName, authorLastName], function(err, row) {
+        `, [authorFirstName, authorLastName], function (err, row) {
             if (err) {
                 next(err);
             }
@@ -41,11 +50,11 @@ function postBook(req, res, next) {
                     (title, year, pages, genre, author_id)
                 VALUES
                     (?, ?, ?, ?, ?);
-            `, [title, year, pages, genre, author_id], function(err) {
+            `, [title, year, pages, genre, author_id], function (err) {
                 if (err) {
                     next(err);
                 }
-    
+
                 res.status(200).json({ msg: "Book added." });
             });
         });
