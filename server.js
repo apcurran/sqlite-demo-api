@@ -2,8 +2,8 @@
 
 const express = require("express");
 
-// const { db } = require("./db/index");
 const authorsRouter = require("./api/routes/authors-router");
+const booksRouter = require("./api/routes/books-router");
 
 const app = express();
 
@@ -11,6 +11,7 @@ app.use(express.json());
 
 // API routers
 app.use("/api/authors", authorsRouter);
+app.use("/api/books", booksRouter);
 
 // general server error handler
 app.use((err, req, res, next) => {
