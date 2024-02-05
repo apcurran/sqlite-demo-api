@@ -15,6 +15,8 @@ app.use("/api/authors", authorsRouter);
 // general server error handler
 app.use((err, req, res, next) => {
     console.error(err);
+
+    res.status(500).json({ error: "Something went wrong." });
 });
 
 app.listen(process.env.PORT, () => {

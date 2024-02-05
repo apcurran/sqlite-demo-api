@@ -11,8 +11,6 @@ function getAuthors(req, res, next) {
     db.all(sql, function (err, rows) {
         if (err) {
             next(err);
-
-            res.status(500).json({ error: "Something went wrong." });
         }
 
         res.status(200).json(rows);
@@ -21,7 +19,19 @@ function getAuthors(req, res, next) {
 
 /** @type {import("express").RequestHandler} */
 function getAuthor(req, res, next) {
+    const { authorId } = req.params;
+    const sql = `
+        SELECT *
+        FROM author
+        WHERE author_id = ?;
+    `;
+    db.get(sql, authorId, function (err, row) {
+        if (err) {
+            next(err);
+        }
 
+        res.status(200).json(row);
+    });
 }
 
 /** @type {import("express").RequestHandler} */
@@ -37,8 +47,6 @@ function postAuthor(req, res, next) {
     db.run(sql, params, function (err) {
         if (err) {
             next(err);
-
-            res.status(500).json({ error: "Something went wrong." });
         }
 
         res.status(201).json({ msg: "Author added." });
