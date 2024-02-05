@@ -14,7 +14,42 @@ function getBook(req, res, next) {
 
 /** @type {import("express").RequestHandler} */
 function postBook(req, res, next) {
+    const {
+        title,
+        year,
+        pages,
+        genre,
+        authorFirstName,
+        authorLastName,
+    } = req.body;
+
+    db.serialize(function() {
+        // query for authorId
+        db.get(`
+            SELECT author_id
+            FROM author
+            WHERE first_name = ? AND last_name = ?;
+        `, [authorFirstName, authorLastName], function(err, row) {
+            if (err) {
+                next(err);
+            }
+
+            const { author_id } = row;
+            // query for creating a new book entry
+            db.run(`
+                INSERT INTO book
+                    (title, year, pages, genre, author_id)
+                VALUES
+                    (?, ?, ?, ?, ?);
+            `, [title, year, pages, genre, author_id], function(err) {
+                if (err) {
+                    next(err);
+                }
     
+                res.status(200).json({ msg: "Book added." });
+            });
+        });
+    });
 }
 
 /** @type {import("express").RequestHandler} */
