@@ -55,7 +55,19 @@ function postAuthor(req, res, next) {
 
 /** @type {import("express").RequestHandler} */
 function deleteAuthor(req, res, next) {
+    const { authorId } = req.params;
+    const sql = `
+        DELETE
+        FROM author
+        WHERE author_id = ?;
+    `;
+    db.run(sql, authorId, function (err) {
+        if (err) {
+            next(err);
+        }
 
+        res.status(200).json({ msg: "Author deleted." });
+    });
 }
 
 module.exports = {
