@@ -28,8 +28,16 @@ function getBooks(req, res, next) {
 function getBook(req, res, next) {
     const { bookId } = req.params;
     db.get(`
-        SELECT *
-        FROM book
+        SELECT
+            book.book_id,
+            book.title,
+            book.year,
+            book.pages,
+            book.genre,
+            author.first_name,
+            author.last_name
+        FROM book INNER JOIN author
+            ON book.author_id = author.author_id
         WHERE book_id = ?;
     `, bookId, function (err, row) {
         if (err) {
