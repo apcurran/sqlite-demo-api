@@ -6,6 +6,7 @@ const { db } = require("../../db/index");
 function getBooks(req, res, next) {
     db.all(`
         SELECT
+            book.book_id,
             book.title,
             book.year,
             book.pages,
