@@ -5,8 +5,15 @@ const { db } = require("../../db/index");
 /** @type {import("express").RequestHandler} */
 function getBooks(req, res, next) {
     db.all(`
-        SELECT *
-        FROM book;
+        SELECT
+            book.title,
+            book.year,
+            book.pages,
+            book.genre,
+            author.first_name,
+            author.last_name
+        FROM book INNER JOIN author
+            ON book.author_id = author.author_id;
     `, function (err, rows) {
         if (err) {
             next(err);
